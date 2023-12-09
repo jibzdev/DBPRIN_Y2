@@ -1,3 +1,24 @@
+-- PLEASE READ --
+-- When Creating database name please use "Solent_Boats" 
+
+-- Solent_Boats
+-- Year 2 DBPRIN Coursework 
+
+-- Code written by UP2115783
+
+CREATE TYPE Emergency_T AS ENUM('Staff', 'Customer');
+CREATE TABLE Emergency_Contact(
+    Emergency_ID SERIAL PRIMARY KEY NOT NULL,
+    Emergency_Type Emergency_T,
+    Emergency_FName VARCHAR(50) NOT NULL,
+    Emergency_LName VARCHAR(50) NOT NULL,
+    Emergency_Phone VARCHAR(20) NOT NULL,
+    Emergency_Email VARCHAR(50) NOT NULL,
+    Emergency_Address VARCHAR(50) NOT NULL,
+    Emergency_Postcode VARCHAR(50) NOT NULL,
+    Emergency_City VARCHAR(50) NOT NULL
+);
+
 INSERT INTO Emergency_Contact (Emergency_Type, Emergency_FName, Emergency_LName, Emergency_Phone, Emergency_Email, Emergency_Address, Emergency_Postcode, Emergency_City) VALUES 
 ('Staff', 'Rogers', 'Berrecloth', '+44 864 261 7658', 'rberrecloth0@livejournal.com', '76009 Bartelt Pass', 'LE14', 'Twyford'),
 ('Staff', 'Ellie', 'Filde', '+44 255 449 6396', 'efilde1@businesswire.com', '8100 Chinook Drive', 'BD23', 'Thorpe'),
@@ -1000,6 +1021,21 @@ INSERT INTO Emergency_Contact (Emergency_Type, Emergency_FName, Emergency_LName,
 ('Staff', 'Charline', 'Snyder', '+44 734 854 9185', 'csnyderrq@census.gov', '027 Stoughton Hill', 'LN6', 'Stapleford'),
 ('Staff', 'Waverly', 'Tobin', '+44 343 635 9954', 'wtobinrr@utexas.edu', '30 Longview Road', 'LS9', 'Halton');
 
+CREATE TYPE Customer_T AS ENUM('Company', 'Individual');
+CREATE TABLE Customer(
+    Customer_ID SERIAL PRIMARY KEY NOT NULL,
+    Customer_FName VARCHAR(35) NOT NULL,
+    Customer_LName VARCHAR(35) NOT NULL,
+    Customer_DOB DATE NOT NULL,
+    Customer_Email VARCHAR(100) NOT NULL,
+    Customer_Phone VARCHAR(25) NOT NULL,
+    Customer_Address VARCHAR(100) NOT NULL,
+    Customer_Postcode VARCHAR(10) NOT NULL,
+    Customer_City VARCHAR(30) NOT NULL,
+    Customer_Type Customer_T,
+    Emergency_ID INT REFERENCES Emergency_Contact(Emergency_ID) NOT NULL
+);
+
 INSERT INTO Customer (Customer_FName, Customer_LName, Customer_DOB, Customer_Email, Customer_Phone, Customer_Address, Customer_Postcode, Customer_City, Customer_Type, Emergency_ID) VALUES
 ('Jerrilee', 'Houndsom', '1985-03-16', 'jhoundsom0@wordpress.org', '+44 155 357 7945', '079 Dexter Court', 'L74', 'Liverpool', 'Company', 282),
 ('Averyl', 'Dowyer', '1990-02-27', 'adowyer1@cdc.gov', '+44 811 888 6722', '850 Karstens Road', 'DT10', 'Kingston', 'Individual', 228),
@@ -1852,7 +1888,12 @@ INSERT INTO Customer (Customer_FName, Customer_LName, Customer_DOB, Customer_Ema
 ('Aldis', 'Pawlata', '1995-03-30', 'apawlatank@dot.gov', '+44 223 266 4541', '36 Reinke Place', 'NG22', 'Milton', 'Individual', 737),
 ('Talbot', 'Corker', '1998-12-28', 'tcorkernl@elegantthemes.com', '+44 348 973 8606', '3621 Summerview Junction', 'DN36', 'West End', 'Individual', 588);
 
-INSERT INTO Country (country_name) VALUES 
+CREATE TABLE Country(
+    Country_ID SERIAL PRIMARY KEY NOT NULL,
+    Country_Name VARCHAR(35) NOT NULL
+);
+
+INSERT INTO Country (Country_Name) VALUES 
 ('Ireland'),
 ('Brazil'),
 ('Iran'),
@@ -1870,6 +1911,17 @@ INSERT INTO Country (country_name) VALUES
 ('France'),
 ('Honduras'),
 ('Russia');
+
+
+CREATE TABLE Boatyard(
+    Yard_ID SERIAL PRIMARY KEY NOT NULL,
+    Yard_Name VARCHAR(35) NOT NULL,
+    Yard_Address VARCHAR(100) NOT NULL,
+    Yard_Postcode VARCHAR(10) NOT NULL,
+    Yard_City VARCHAR(30) NOT NULL,
+    Yard_Size VARCHAR(50),
+    Country_ID INT REFERENCES Country(Country_ID) NOT NULL
+);
 
 INSERT INTO Boatyard (yard_name, yard_address, yard_postcode, yard_city, yard_size, country_id) VALUES
 ('Runte, Bartell and Goyette', '44 Novick Road', 'EC3M', 'London', '50 Boats', 1),
@@ -1889,6 +1941,21 @@ INSERT INTO Boatyard (yard_name, yard_address, yard_postcode, yard_city, yard_si
 ('Gusikowski-Wisoky', '29 Arapahoe Point', 'NN4', 'Wootton', '10 Boats', 14),
 ('Walsh, Schowalter and Larkin', '48561 Swallow Road', 'GU32', 'Weston', '40 Boats', 15),
 ('Bahringer, VonRueden and Wuckert', '66 Corry Way', 'DT10', 'Kingston', '50 Boats', 16);
+
+CREATE TABLE Staff(
+    Staff_ID SERIAL PRIMARY KEY NOT NULL,
+    Staff_FName VARCHAR(35) NOT NULL,
+    Staff_LName VARCHAR(35) NOT NULL,
+    Staff_DOB DATE NOT NULL,
+    Staff_Email VARCHAR(100) NOT NULL,
+    Staff_Phone VARCHAR(20) NOT NULL,
+    Staff_Address VARCHAR(100) NOT NULL,
+    Staff_Postcode VARCHAR(10) NOT NULL,
+    Staff_City VARCHAR(30) NOT NULL,
+    Date_Of_Employment DATE NOT NULL,
+    Yard_ID INT REFERENCES Boatyard(Yard_ID) NOT NULL,
+    Emergency_ID INT REFERENCES Emergency_Contact(Emergency_ID) NOT NULL
+);
 
 INSERT INTO Staff (Staff_FName, Staff_LName, Staff_DOB, Staff_Email, Staff_Phone, Staff_Address, Staff_Postcode, Staff_City, Date_Of_Employment, Yard_ID, Emergency_ID) VALUES
 ('Ronna', 'Catterson', '1980-06-11', 'rcatterson0@adobe.com', '+44 636 176 9340', '3517 Meadow Valley Junction', 'CB4', 'Church End', '2023-08-27', 9, 954),
@@ -2342,6 +2409,12 @@ INSERT INTO Staff (Staff_FName, Staff_LName, Staff_DOB, Staff_Email, Staff_Phone
 ('Charline', 'Plews', '2002-04-03', 'cplewscg@biblegateway.com', '+44 453 881 6208', '2193 Summer Ridge Trail', 'NG22', 'Milton', '2023-01-11', 14, 860),
 ('Hildagard', 'Pinnell', '1990-03-03', 'hpinnellch@issuu.com', '+44 565 378 0873', '069 Riverside Lane', 'BT66', 'Craigavon', '2021-05-06', 9, 962);
 
+CREATE TABLE Role(
+    Role_ID SERIAL PRIMARY KEY NOT NULL,
+    Role_Name VARCHAR(25) NOT NULL,
+    Role_Description VARCHAR(250) NOT NULL
+);
+
 INSERT INTO Role (Role_Name, Role_Description) VALUES
 ('Manager', 'Responsible for overseeing and coordinating all activities within the boatyard. Provides leadership, strategic direction, and ensures efficient operations.'),
 ('Deputy Manager', 'Supports the manager in daily operations, manages staff, and assists in decision-making. Acts as a bridge between the manager and other team members.'),
@@ -2351,9 +2424,11 @@ INSERT INTO Role (Role_Name, Role_Description) VALUES
 ('Engineer', 'Applies engineering principles to design and improve boat structures and systems. Collaborates with other team members to enhance vessel performance and safety.'),
 ('Customer Assisstant', 'Provides assistance and information to customers visiting the boatyard. Handles inquiries, facilitates sales, and ensures a positive customer experience.');
 
--- This script will make 55% of staff have a chance to have 1 role,
--- 30% to have 2 roles and 15% with 3 roles ensuring that staff can have
--- more than one role.
+CREATE TABLE Staff_Role(
+    Staff_ID INT REFERENCES Staff(Staff_ID) NOT NULL,
+    Role_ID INT REFERENCES Role(Role_ID) NOT NULL
+);
+
 INSERT INTO Staff_Role (Staff_ID, Role_ID)
 SELECT
     Staff_ID,
@@ -2372,6 +2447,24 @@ WHERE
         WHEN random() < 0.85 THEN 2
         ELSE 3
     END;
+
+CREATE TYPE Boat_T AS ENUM('Commercial', 'Private');
+CREATE TABLE Boats (
+    Boat_ID SERIAL PRIMARY KEY,
+    Boat_Name VARCHAR(50) NOT NULL,
+    Build_Date DATE NOT NULL,
+    Boat_Class VARCHAR(50) NOT NULL,
+    Boat_Hull_Design VARCHAR(150) NOT NULL,
+    Boat_Dimensions VARCHAR(50) NOT NULL,
+    Boat_Propulsion VARCHAR(50) NOT NULL,
+    Fuel_Type VARCHAR(15) NOT NULL,
+    Boat_Capacity INT NOT NULL,
+    Boat_Registration VARCHAR(50),
+    Boat_History VARCHAR(250) NOT NULL,
+    Boat_Type Boat_T,
+    Yard_ID INT REFERENCES Boatyard(Yard_ID) NOT NULL,
+    Customer_ID INT REFERENCES Customer(Customer_ID) NOT NULL
+);
 
 INSERT INTO Boats (Boat_Name, Build_Date, Boat_Class, Boat_Hull_Design, Boat_Dimensions, Boat_Propulsion, Fuel_Type, Boat_Capacity, Boat_History, Boat_Type, Yard_ID, Customer_ID) VALUES
 ('Boxster', '2004-07-25', 'Class G', 'Round-Bottom', '27 ft x 11 ft', 'Inboard Motor', 'Electric', 20, 'Impl other limb length', 'Private', 11, 141),
@@ -3225,7 +3318,6 @@ INSERT INTO Boats (Boat_Name, Build_Date, Boat_Class, Boat_Hull_Design, Boat_Dim
 ('Veyron', '2020-01-09', 'Class B', 'Round-Bottom', '38 ft x 15 ft', 'Paddle', 'Electric', 9, 'Excision foot joint NEC', 'Commercial', 12, 104),
 ('Elantra', '2002-11-11', 'Class B', 'V-Shaped', '19 ft x 6.5 ft', 'Pod Drive', 'Petrol', 16, 'Character analysis', 'Private', 12, 469);
 
--- Creating Registration Plates
 CREATE OR REPLACE FUNCTION Generate_Plates()
 RETURNS VARCHAR(50) AS $$
 DECLARE
@@ -3250,6 +3342,12 @@ $$ LANGUAGE plpgsql;
 UPDATE Boats
 SET Boat_Registration = Generate_Plates()
 WHERE Boat_Registration IS NULL;
+
+CREATE TABLE Facilities(
+    Facility_ID SERIAL PRIMARY KEY NOT NULL,
+    Facility_Name VARCHAR(50) NOT NULL,
+    Facility_Details VARCHAR(250) NOT NULL
+);
 
 INSERT INTO Facilities (facility_name, facility_details) VALUES
 ('Pixope', 'Unspecified car occupant injured in collision with pedal cycle in traffic accident'),
@@ -3303,6 +3401,11 @@ INSERT INTO Facilities (facility_name, facility_details) VALUES
 ('Quinu', 'Neoplasm of uncertain behavior of unspecified testis'),
 ('Oyoloo', 'Salter-Harris Type III physeal fracture of lower end of ulna, left arm, subsequent encounter for fracture with nonunion');
 
+CREATE TABLE Facilities_Boatyard(
+    Facility_ID INT REFERENCES Facilities(Facility_ID) NOT NULL,
+    Yard_ID INT REFERENCES Boatyard(Yard_ID) NOT NULL
+);
+
 INSERT INTO Facilities_Boatyard (facility_id, yard_id) VALUES 
 (1, 16),
 (2, 9),
@@ -3354,6 +3457,12 @@ INSERT INTO Facilities_Boatyard (facility_id, yard_id) VALUES
 (48, 3),
 (49, 7),
 (50, 1);
+
+CREATE TABLE Parts(
+    Part_ID SERIAL PRIMARY KEY NOT NULL,
+    Part_Name VARCHAR(50) NOT NULL,
+    Part_Description VARCHAR(250) NOT NULL
+);
 
 INSERT INTO Parts (Part_Name, Part_Description) VALUES
 ('Clifton''s Eremogone', 'Cortex (cerebral) laceration without mention of open intracranial wound, with loss of consciousness of unspecified duration'),
@@ -3456,6 +3565,17 @@ INSERT INTO Parts (Part_Name, Part_Description) VALUES
 ('Starviolet', 'Chronic rhinitis'),
 ('Blacktack Phacelia', 'Screening for gout'),
 ('Entodon Moss', 'Sciatica');
+
+CREATE TABLE Service(
+    Service_ID SERIAL PRIMARY KEY NOT NULL,
+    Service_Date DATE NOT NULL,
+    Service_Details VARCHAR(250) NOT NULL,
+    Completed BOOLEAN NOT NULL,
+    Emergency_Service BOOLEAN NOT NULL,
+    Customer_ID INT REFERENCES Customer(Customer_ID) NOT NULL,
+    Part_ID INT REFERENCES Parts(Part_ID) NOT NULL,
+    Boat_ID INT REFERENCES Boats(Boat_ID) NOT NULL
+);
 
 INSERT INTO Service (Service_Date, Service_Details, Completed, Emergency_Service, Customer_ID, Part_ID, Boat_ID) VALUES
 ('2021-03-24', 'Revision of Drainage Device in Left Finger Phalangeal Joint, Percutaneous Approach', false, false, 87, 34, 627),
@@ -3609,6 +3729,13 @@ INSERT INTO Service (Service_Date, Service_Details, Completed, Emergency_Service
 ('2021-04-08', 'Bypass Right Common Iliac Artery to Left Renal Artery, Open Approach', false, true, 214, 26, 84),
 ('2023-05-31', 'Removal of Autologous Tissue Substitute from Nose, Percutaneous Endoscopic Approach', false, true, 700, 63, 348);
 
+CREATE TABLE Booking(
+    Booking_ID SERIAL PRIMARY KEY NOT NULL,
+    Booking_Date DATE NOT NULL,
+    Service_ID INT REFERENCES Service(Service_ID) NOT NULL,
+    Customer_ID INT REFERENCES Customer(Customer_ID) NOT NULL
+);
+
 INSERT INTO Booking (Booking_Date, Service_ID, Customer_ID) VALUES
 ('2022-07-18', 106, 530),
 ('2021-07-28', 87, 418),
@@ -3761,6 +3888,13 @@ INSERT INTO Booking (Booking_Date, Service_ID, Customer_ID) VALUES
 ('2022-09-21', 147, 604),
 ('2021-09-08', 50, 198);
 
+CREATE TABLE Service_Staff(
+    Service_ID INT REFERENCES Service(Service_ID) NOT NULL,
+    Staff_ID INT REFERENCES Staff(Staff_ID) NOT NULL,
+    Service_Description VARCHAR(250) NOT NULL,
+    Yard_ID INT REFERENCES Boatyard(Yard_ID) NOT NULL
+);
+
 INSERT INTO Service_Staff (Service_ID, Staff_ID, Service_Description, Yard_ID) VALUES
 (126, 90, 'Poisoning by oth opioids, intentional self-harm, init encntr', 14),
 (109, 414, 'Stress fracture, left humerus, subs for fx w routn heal', 2),
@@ -3912,3 +4046,49 @@ INSERT INTO Service_Staff (Service_ID, Staff_ID, Service_Description, Yard_ID) V
 (50, 438, 'Drown due to fishing boat overturning, subs', 16),
 (40, 51, 'Leakage of unsp cardiac and vasc devices and implnt, subs', 8),
 (20, 307, 'Burn of second degree of multiple sites of wrist and hand', 3);
+
+CREATE ROLE admin;
+CREATE ROLE staff_member;
+CREATE ROLE customer;
+CREATE ROLE emergency_contact_manager;
+CREATE ROLE customer_manager;
+CREATE ROLE boatyard_manager;
+CREATE ROLE staff_manager;
+CREATE ROLE role_manager;
+CREATE ROLE boat_manager;
+CREATE ROLE facilities_manager;
+CREATE ROLE parts_manager;
+CREATE ROLE service_manager;
+CREATE ROLE booking_manager;
+CREATE ROLE service_staff_manager;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Emergency_Contact TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Customer TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Country TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Boatyard TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Staff TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Role TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Staff_Role TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Boats TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Facilities TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Facilities_Boatyard TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Parts TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Booking TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service_Staff TO admin;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Emergency_Contact TO staff_member;
+GRANT SELECT ON TABLE Customer TO staff_member;
+GRANT SELECT ON TABLE Boatyard TO staff_member;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Emergency_Contact TO emergency_contact_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Customer TO customer_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Boatyard TO boatyard_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Staff TO staff_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Role TO role_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Staff_Role TO role_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Boats TO boat_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Facilities TO facilities_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Parts TO parts_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service TO service_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Booking TO booking_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service_Staff TO service_staff_manager;
+
