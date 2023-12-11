@@ -4048,19 +4048,18 @@ INSERT INTO Service_Staff (Service_ID, Staff_ID, Service_Description, Yard_ID) V
 (20, 307, 'Burn of second degree of multiple sites of wrist and hand', 3);
 
 CREATE ROLE admin;
-CREATE ROLE staff_member;
+
 CREATE ROLE customer;
-CREATE ROLE emergency_contact_manager;
-CREATE ROLE customer_manager;
-CREATE ROLE boatyard_manager;
+
+CREATE ROLE staff_member;
 CREATE ROLE staff_manager;
-CREATE ROLE role_manager;
+
 CREATE ROLE boat_manager;
-CREATE ROLE facilities_manager;
-CREATE ROLE parts_manager;
+CREATE ROLE boat_staff;
+
 CREATE ROLE service_manager;
-CREATE ROLE booking_manager;
-CREATE ROLE service_staff_manager;
+CREATE ROLE service_staff;
+
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Emergency_Contact TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Customer TO admin;
@@ -4076,19 +4075,38 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Parts TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Booking TO admin;
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service_Staff TO admin;
+
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Emergency_Contact TO staff_member;
 GRANT SELECT ON TABLE Customer TO staff_member;
 GRANT SELECT ON TABLE Boatyard TO staff_member;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Emergency_Contact TO emergency_contact_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Customer TO customer_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Boatyard TO boatyard_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Staff TO staff_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Role TO role_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Staff_Role TO role_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Boats TO boat_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Facilities TO facilities_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Parts TO parts_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service TO service_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Booking TO booking_manager;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service_Staff TO service_staff_manager;
 
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Customer TO staff_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Boatyard TO staff_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Staff TO staff_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Role TO staff_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Staff_Role TO staff_manager;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Boats TO boat_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Facilities TO boat_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Parts TO boat_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service TO boat_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Booking TO boat_manager;
+
+GRANT SELECT ON TABLE Boats TO boat_staff;
+GRANT SELECT ON TABLE Facilities TO boat_staff;
+GRANT SELECT ON TABLE Parts TO boat_staff;
+GRANT SELECT ON TABLE Service TO boat_staff;
+GRANT SELECT ON TABLE Booking TO boat_staff;
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service_Staff TO service_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Service TO service_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Booking TO service_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Parts TO service_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Facilities TO service_manager;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Facilities_Boatyard TO service_manager;
+
+GRANT SELECT ON TABLE Service TO service_staff;
+GRANT SELECT ON TABLE Booking TO service_staff;
+GRANT SELECT ON TABLE Parts TO service_staff;
+GRANT SELECT ON TABLE Facilities TO service_staff;
+GRANT SELECT ON TABLE Facilities_Boatyard TO service_staff;
