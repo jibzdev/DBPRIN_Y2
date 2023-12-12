@@ -1,5 +1,9 @@
 -- Query 1
--- Find the top 10 staff members who have completed the most services.
+-- Identify the top-performing 10 staff members based on their
+-- exceptional service completion records. This comprehensive analysis
+-- involves aggregating service counts for each staff member, allowing the
+-- business to spotlight and appreciate the remarkable achievements of
+-- its workforce.
 
 WITH StaffServiceCounts AS (
     SELECT
@@ -27,7 +31,11 @@ ORDER BY
 LIMIT 10; 
 
 -- Query 2
--- Select All Services that are uncompleted, List all boat details and issues along side it.
+-- Retrieve a comprehensive list of uncompleted services, showcasing detailed boat
+-- information alongside any outstanding issues. This query encompasses boat specifications,
+-- service details, and pertinent customer and staff information. It serves as a valuable tool
+-- for efficiently managing ongoing service tasks, allowing the team to address outstanding issues
+-- promptly and enhance overall service quality.
 
 SELECT
     Boats.Boat_ID,
@@ -70,7 +78,9 @@ WHERE
     Service.Completed = False;
 
 -- Query 3
--- This will analyse services at facilities to determine the demand of facilities
+-- Conduct a detailed analysis of facility demand by examining service bookings at various facilities.
+-- This query provides valuable insights into the popularity and utilisation of different facilities,
+-- allowing the business to strategically assess and cater to the dynamic demand landscape.
 
 SELECT
     Facilities.Facility_ID,
@@ -124,7 +134,9 @@ ORDER BY
 LIMIT 5;
 
 -- Query 5
--- Find all Facilites that are available for Services (IE: not been booked for any services)
+-- Identify all available facilities for services by retrieving those that have not been booked for any services.
+-- This query provides a comprehensive list of facilities, including details and associated boatyards,
+-- ensuring efficient utilisation of resources. The specified yard ID range ensures the focus on facilities within a specific boatyard.
 SELECT 
     Facilities.Facility_ID,
     Facilities.Facility_Name,
